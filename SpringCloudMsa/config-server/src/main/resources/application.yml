@@ -1,0 +1,19 @@
+server:
+  port: 8888
+
+spring:
+  appliation:
+    name: config-service
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+#        native: # local
+#         search-locations: file:///C:\\Users\\jun\\study\\SpringCloudMsa\\native-file-repo
+        git: # git
+          uri: file:///C:\\Users\\jun\\study\\SpringCloudMsa\\git-local-repo
+#file:\\\C:\Users\오준혁\study\SpringCloudMsa\git-local-repo
+#          username:
+#          password:
+
