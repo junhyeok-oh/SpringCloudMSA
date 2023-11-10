@@ -1,5 +1,6 @@
 package com.example.userservice.service;
 
+import com.example.userservice.client.OrderServiceClient;
 import com.example.userservice.dto.UserDto;
 import com.example.userservice.jpa.UserEntity;
 import com.example.userservice.jpa.UserRepository;
@@ -28,6 +29,18 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     //Environment env;
+
+    //Feign
+    OrderServiceClient orderServiceClient;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository,
+                           BCryptPasswordEncoder passwordEncoder,
+                           OrderServiceClient orderServiceClient) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.orderServiceClient = orderServiceClient;
+    }
 
     //Email(여기서는 Id)를 이용해서 계정 체크하는 메소드
     @Override
@@ -72,6 +85,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserByUserId(String userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
 
+
         //조회할 유저가 없을 경우
         if (userEntity == null)
             throw new UsernameNotFoundException("User not found");
@@ -79,8 +93,10 @@ public class UserServiceImpl implements UserService {
         // UserEntity -> UserDto로 변환
         UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
 
-        List<ResponseOrder> orders = new ArrayList<>();
-        userDto.setOrders(orders);
+        //Feign Client 사용
+        List<ResponseOrder> ordersList = orderServiceClient.getOrders(userId);
+
+        userDto.setOrders(ordersList);
 
         return userDto;
     }

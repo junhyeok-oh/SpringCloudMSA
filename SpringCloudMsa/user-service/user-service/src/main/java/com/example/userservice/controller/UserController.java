@@ -76,6 +76,8 @@ public class UserController {
         });
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+    
+    //유저 조회 (유저 정보, 주문 정보)
     @GetMapping("/users/{userId}")
     public ResponseEntity<ResponseUser> getUser(@PathVariable("userId") String userId) {
         UserDto userDto = userService.getUserByUserId(userId);

@@ -38,3 +38,6 @@ greeting:
 token:
   expiration_time: 86400000  # sec, 유효기간 24시간
   secret: user_token
+
+order_service:
+  url:  http://ORDER-SERVICE/order-service/%s/orders
